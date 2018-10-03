@@ -10,7 +10,7 @@
     
     
     
-    <title>Tags: writeup标签 | Hexo</title>
+    <title>Bugku逆向部分writeup | Hexo</title>
     <!-- inject:style -->
     <link href="/css/style.css" rel="stylesheet" type="text/css">
     <!-- endinject -->
@@ -160,29 +160,62 @@
     
     <div class="cube-content">
         <div class="cube-left">
-            <style>
-    @media(max-width: 768px) {
-        body {
-            background-color: #fff!important;
-        }
-    }
-</style>
-<div class="cube-archives">
+            <div class="cube-article">
+    <h1 class="title">Bugku逆向部分writeup</h1>
     
-    <div class="cube-archive" style="margin-top: 0;">
-        <h1 class="title">writeup标签</h1>
-        
-        <ul class="posts">
-            
-            <li class="post">
-                <a href="/2018/07/12/123/">标题</a>
-            </li>
-            
-        </ul>
-        
-    </div>
+    <div class="cube-article-header">
+        <div class="cube-article-date">
+            <i class="cube-icon cube-icon-date" aria-hidden="true"></i>
+            <!-- moment.js对象 -->
+            2018-10-03
+        </div>
+        <div class="cube-article-tags">
+    <i class="cube-icon cube-icon-tag" aria-hidden="true"></i>
+    
+    <a href="/tags/writeup/">#writeup</a>
     
 </div>
+    </div>
+    
+    <div class="cube-article-content cube-markdown">
+        
+        <p>##第一题</p>
+<p>用ida打开浏览一下就可以看到flag</p>
+<pre><code>.text:004023A5 loc_4023A5:                             ; CODE XREF: .text:00402391↑j
+.text:004023A5                 mov     eax, [ebp-18h]
+.text:004023A8                 push    eax
+.text:004023A9                 push    offset aMctfN3tRev1sE4 ; &quot;MCTF{_N3t_Rev_1s_E4ay_}&quot;
+.text:004023AE                 call    ds:__vbaStrCmp
+.text:004023B4                 mov     edi, eax
+.text:004023B6                 lea     ecx, [ebp-18h]
+.text:004023B9                 neg     edi
+.text:004023BB                 sbb     edi, edi
+.text:004023BD                 inc     edi
+.text:004023BE                 neg     edi
+</code></pre><p>##第二题<br>用OD打开右键》智能搜索》中文引擎搜索<br><br>发现flag就在上面<br><br><img src="https://p4.cdn.img9.top/ipfs/QmaYi8ufdKqTF3AwoaV3ezukMj2GZ89aNfXRyd33xzGyoe?4.png" alt="title"></p>
+
+    </div>
+</div>
+
+<div class="cube-article-nav">
+    <ul>
+        
+        
+        <li class="next">
+            <a href="/2018/07/12/123/">
+                标题
+                <i class="cube-icon cube-next" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+<!-- TODO 根据theme.comment的内容进行入口选择 -->
+
+
+
         </div>
         <div class="cube-right">
             
@@ -291,7 +324,7 @@
     <div class="cube-boxs">
         
         
-        <div class="cube-box-bg ">
+        <div class="cube-box ">
             <a href="/categories/分类/">#分类</a>
         </div>
         
@@ -312,7 +345,7 @@
     <div class="cube-boxs">
         
         
-        <div class="cube-box-bg ">
+        <div class="cube-box ">
             <a href="/tags/writeup标签/">#writeup标签</a>
         </div>
         

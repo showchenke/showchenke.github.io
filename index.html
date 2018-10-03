@@ -161,6 +161,47 @@
     <div class="cube-content">
         <div class="cube-left">
             
+<div class="cube-excerpt" id="cube-excerpt-Bugku逆向部分writeup">
+    <header class="cube-excerpt-header">
+        <h1><a href="/2018/10/03/bugkuwriteup/">Bugku逆向部分writeup</a></h1>
+        <div class="cube-excerpt-header-msg">
+            <div class="cube-excerpt-date">
+                <i class="cube-icon cube-icon-date" aria-hidden="true"></i>
+                2018-10-03
+            </div>
+            <div class="cube-excerpt-tags">
+                <i class="cube-icon cube-icon-tag" aria-hidden="true"></i>
+                
+                <a href="/tags/writeup/" class="cube-excerpt-tag-link">#writeup</a>
+                
+            </div>
+        </div>
+    </header>
+    <article class="cube-excerpt-entry cube-markdown">
+        
+        
+           <p>##第一题</p>
+<p>用ida打开浏览一下就可以看到flag</p>
+<pre><code>.text:004023A5 loc_4023A5:                             ; CODE XREF: .text:00402391↑j
+.text:004023A5                 mov     eax, [ebp-18h]
+.text:004023A8                 push    eax
+.text:004023A9                 push    offset aMctfN3tRev1sE4 ; &quot;MCTF{_N3t_Rev_1s_E4ay_}&quot;
+.text:004023AE                 call    ds:__vbaStrCmp
+.text:004023B4                 mov     edi, eax
+.text:004023B6                 lea     ecx, [ebp-18h]
+.text:004023B9                 neg     edi
+.text:004023BB                 sbb     edi, edi
+.text:004023BD                 inc     edi
+.text:004023BE                 neg     edi
+</code></pre><p>##第二题<br>用OD打开右键》智能搜索》中文引擎搜索<br><br>发现flag就在上面<br><br><img src="https://p4.cdn.img9.top/ipfs/QmaYi8ufdKqTF3AwoaV3ezukMj2GZ89aNfXRyd33xzGyoe?4.png" alt="title"></p>
+
+        
+    </article>
+    <footer class="cube-excerpt-footer">
+        <a class="cube-excerpt-more" href="/2018/10/03/bugkuwriteup/">Read More</a>
+    </footer>
+</div>
+
 <div class="cube-excerpt" id="cube-excerpt-标题">
     <header class="cube-excerpt-header">
         <h1><a href="/2018/07/12/123/">标题</a></h1>
@@ -277,9 +318,9 @@
     
     
     <div class="count">
-        <a class="count articles"><span>1</span>Article</a>
-        <a class="count tags"><span>1</span>Tags</a>
-        <a class="count categories"><span>1</span>Categories</a>
+        <a class="count articles"><span>2</span>Article</a>
+        <a class="count tags"><span>2</span>Tags</a>
+        <a class="count categories"><span>2</span>Categories</a>
     </div>
 </div>
 
@@ -316,10 +357,23 @@
                     <span>1</span>
                 </p>
                 <p class="title">
-                    <a href="/2018/07/12/123/" title="标题">标题</a>
+                    <a href="/2018/10/03/bugkuwriteup/" title="Bugku逆向部分writeup">Bugku逆向部分writeup</a>
                 </p>
             </div>
             
+        </li>
+        
+        
+        
+        <li>
+            <div class="normal">
+                <p class="index">
+                    <span>2</span>
+                </p>
+                <p class="title">
+                    <a href="/2018/07/12/123/" title="标题">标题</a>
+                </p>
+            </div>
         </li>
         
         
@@ -339,6 +393,11 @@
             <a href="/categories/分类/">#分类</a>
         </div>
         
+        
+        <div class="cube-box ">
+            <a href="/categories/writeup/">#writeup</a>
+        </div>
+        
     </div>
 </div>
 
@@ -353,6 +412,11 @@
         
         <div class="cube-box ">
             <a href="/tags/writeup标签/">#writeup标签</a>
+        </div>
+        
+        
+        <div class="cube-box-bg ">
+            <a href="/tags/writeup/">#writeup</a>
         </div>
         
     </div>
