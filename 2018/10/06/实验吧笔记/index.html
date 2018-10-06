@@ -10,7 +10,7 @@
     
     
     
-    <title>Archives | Hexo</title>
+    <title>实验吧逆向破解课程学习笔记 | Hexo</title>
     <!-- inject:style -->
     <link href="/css/style.css" rel="stylesheet" type="text/css">
     <!-- endinject -->
@@ -160,40 +160,158 @@
     
     <div class="cube-content">
         <div class="cube-left">
-            <style>
-    @media(max-width: 768px) {
-        body {
-            background-color: #fff!important;
-        }
-    }
-</style>
-<div class="cube-archives">
+            <div class="cube-article">
+    <h1 class="title">实验吧逆向破解课程学习笔记</h1>
     
-        
-        <div class="cube-archive" style="margin-top: 0;">
-            
-                
-                   
-                            <h1 class="title">2018</h1>
-                            <ul class="posts">
-                   
-                            <li class="post">
-                                <a href="/2018/10/06/实验吧笔记/">实验吧逆向破解课程学习笔记</a>
-                            </li>
-                
-            
-                
-                   
-                            <li class="post">
-                                <a href="/2018/10/03/bugkuwriteup/">Bugku逆向部分writeup</a>
-                            </li>
-                
-            
-                    </ul>
-                        </div>
-        
+    <div class="cube-article-header">
+        <div class="cube-article-date">
+            <i class="cube-icon cube-icon-date" aria-hidden="true"></i>
+            <!-- moment.js对象 -->
+            2018-10-06
+        </div>
+        <div class="cube-article-tags">
+    <i class="cube-icon cube-icon-tag" aria-hidden="true"></i>
+    
+    <a href="/tags/笔记/">#笔记</a>
     
 </div>
+    </div>
+    
+    <div class="cube-article-content cube-markdown">
+        
+        <h1 id="逆向破解的方法"><a href="#逆向破解的方法" class="headerlink" title="逆向破解的方法"></a>逆向破解的方法</h1><h3 id="常用软件"><a href="#常用软件" class="headerlink" title="常用软件"></a>常用软件</h3><pre><code>查壳软件PEID
+脱壳软件lordPE、REC
+逆向破解软件OD
+dede 查找按钮事件（地址）
+</code></pre><h3 id="1-暴力破解"><a href="#1-暴力破解" class="headerlink" title="1.暴力破解"></a>1.暴力破解</h3><pre><code>掌握利用字符串的方法破解程序
+
+ 原理
+     利用登录时提供的关键字，找到关键跳转然后将关键跳转命令NOP掉。
+
+ 方法
+     先黑盒测试
+     找到关键字，比如登录框中提供的错误提示
+     利用右键-&gt;中文搜索引擎-&gt;智能搜索 搜索到关键字false
+     然后双击关键字，跳转到汇编窗口false对应的哪一行 
+     向上查找关键跳转（就是能够跳转到false语句）（je、jmp、jnz、je）
+     我们可以通过下断点测试
+     运行 输入账号密码 查看是否会实现跳转
+     右键二进制-&gt;用nop填充
+     复制到可执行文件-选择
+     保存到文件即可
+</code></pre><h3 id="2-获得注册码"><a href="#2-获得注册码" class="headerlink" title="2.获得注册码"></a>2.获得注册码</h3><pre><code>原理
+    利用登录时提供的关键字，找到关键字的call、下断点，单步试调追出注册码
+
+方法
+     先黑盒测试
+     找到关键字，比如登录框中提供的错误提示
+     利用右键-&gt;中文搜索引擎-&gt;智能搜索 搜索到关键字
+     通过下断点，单步试调找到对应的用户名密码
+</code></pre><h3 id="3-跳转破解"><a href="#3-跳转破解" class="headerlink" title="3.跳转破解"></a>3.跳转破解</h3><pre><code>jmp：无条件跳转
+利用软件登录时提供的关键字，找到关键跳转下断点
+更改跳转命令，改变程序流程
+空格键：编辑汇编指令
+</code></pre><h3 id="4-带壳破解"><a href="#4-带壳破解" class="headerlink" title="4.带壳破解"></a>4.带壳破解</h3><pre><code>加壳程序在载入OD时，现在入壳程序，然后有壳程序解密软件。
+所以需要跳转到软件解密的地方搜索关键字符串，加密状态下是无法搜索到的
+步骤：首先OD载入加壳软件
+    然后F9运行，使软件运行起来
+    然后ctrl+g，输入00401000（使软件跳转到程序解密的开始处，这样就可以搜索关键字了）
+    中文搜索引擎-&gt;智能搜索
+    之后的步骤就和常规的一样了
+</code></pre><h3 id="5-软件文件大小自校验"><a href="#5-软件文件大小自校验" class="headerlink" title="5.软件文件大小自校验"></a>5.软件文件大小自校验</h3><pre><code>利用ESP定律脱壳，然后OD把软件文件大小自校验NOP掉，软件正常运行
+
+脱壳完成后还是无法打开软件，判断是软件大小自校验，脱壳后的文件会变大
+接下来去除软件大小自校验
+插件-&gt;APld断点设置工具0-&gt;常用断点设置-&gt;文件处理-&gt;GetFileSize
+F9运行到断点出
+单击堆栈窗口-&gt;右键-&gt;在反汇编窗口中跟随
+F2下断点
+端机工具栏中的B，切换到断点窗口，删除getfilesize的断点
+getfilesize函数获取了脱壳后的程序大小，然后利用cmp eax,0xc6c8 命令比较 
+我们把这条指令nop掉即可
+</code></pre><h3 id="6-修改关键call返回值"><a href="#6-修改关键call返回值" class="headerlink" title="6.修改关键call返回值"></a>6.修改关键call返回值</h3><pre><code>利用软件登录时提供的关键字，找到关键call，改变关键call返回值，进而改变关键跳的流程
+通过智能搜索字符串注册
+双击定位到反汇编处，向上寻找关键跳转指令，发现吧je指令可以跳过注册，然后找到关键call，修改关键call，使得跳转实现
+</code></pre><h3 id="7-重启验证读取文件"><a href="#7-重启验证读取文件" class="headerlink" title="7.重启验证读取文件"></a>7.重启验证读取文件</h3><pre><code>利用系统API函数下断点，解压软件，然后跳转到0401000处，查找关键字符串，找到关键跳转下断点，更改跳转命令，改变程序流程
+</code></pre><h3 id="8-万能断点"><a href="#8-万能断点" class="headerlink" title="8.万能断点"></a>8.万能断点</h3><pre><code>万能断点就是把能下的断点都下一遍
+利用万能断点追出注册码
+万能断点：F3 A5 8B C8 83 E1 03 F3 A4 E8
+单步步过追出注册码
+</code></pre><h3 id="9-VB弹出窗口"><a href="#9-VB弹出窗口" class="headerlink" title="9.VB弹出窗口"></a>9.VB弹出窗口</h3><pre><code>掌握利用VB弹出函数追出软件内的注册码
+在rtcMsgBox函数处下断点，然后追出账号和密码
+运行程序输入错误的账号密码，然后单步步过找到关键跳转
+</code></pre><h3 id="10-删除弹窗"><a href="#10-删除弹窗" class="headerlink" title="10.删除弹窗"></a>10.删除弹窗</h3><pre><code>掌握删除弹窗提示对话框的方法
+f12暂停法直接到user32里了，K按钮进入堆栈页面
+找到user32.MessageBoxExA，然后下断点
+</code></pre><h3 id="11-真码保存在系统文件"><a href="#11-真码保存在系统文件" class="headerlink" title="11.真码保存在系统文件"></a>11.真码保存在系统文件</h3><pre><code>运行程序找到关键字
+通过关键字找到关键跳转，然后nop掉就可以了
+</code></pre><h3 id="12-BC-手动查找IAT"><a href="#12-BC-手动查找IAT" class="headerlink" title="12.BC++手动查找IAT"></a>12.BC++手动查找IAT</h3><pre><code>BC+被脱壳后需要手工修复ITA
+使用ESP定律脱壳
+OEP处手动寻找IAT，在jmp下的第一个call，按回车进入call寻找IAT
+向上找到段首，右键》数据窗口中跟随》内存地址
+然后早内存窗口中，右键长型》地址  0056E114
+点击工具栏中的M切换到内存页面软件的基地址为00400000
+计算出IAT地址为0016E114
+在REC中修改OEP：14E0 RVA：16E114
+保存报表  删除无效的指针
+修正转储
+</code></pre><h3 id="13-利用dede查找按钮事件"><a href="#13-利用dede查找按钮事件" class="headerlink" title="13.利用dede查找按钮事件"></a>13.利用dede查找按钮事件</h3><pre><code>软件载入到dede中
+单击过程，发现有三个按钮界面
+选择按钮事件的段首分别为004046F0和0040479C
+把软件载入到od，ctrl+g，给两处下断点
+第一个断点没有到输入注册码的地方，删除断点继续运行
+然后出入注册码，点击注册
+向下寻找关键跳转然后nop掉就可以了
+</code></pre><h3 id="14-ALT-F9关键call追注册码"><a href="#14-ALT-F9关键call追注册码" class="headerlink" title="14.ALT+F9关键call追注册码"></a>14.ALT+F9关键call追注册码</h3><pre><code>掌握急用ALT+F9的方法找到MessageBox提示框，跳到用户空间，追寻正确的注册码
+运行软件，当弹出注册失败框时，返回到OD界面，F12暂停
+OD打开运行软件，点击注册输入注册码，出现失败弹窗
+返回OD，F12暂停,然后菜单栏中，调试》按钮》执行到用户代码
+然后单击确定，返回到用户代码处
+</code></pre><h3 id="15-加壳软件打补丁"><a href="#15-加壳软件打补丁" class="headerlink" title="15.加壳软件打补丁"></a>15.加壳软件打补丁</h3><pre><code>利用OD追出注册码
+智能搜索已注册和未注册
+点击已注册跳转到反汇编窗口
+向上查找，发现有两个jmp跳过注册成功的提示
+在向上寻找能跳过两个jmp的跳转，这就是关键跳转
+打开注册机其他》标签》制作内存补丁
+选择软件，然后添加修改地址为关键跳转的地址，长度为6，原始指令0F8489040000，修改地址为909090909090
+</code></pre><h3 id="16-易语言窗体法"><a href="#16-易语言窗体法" class="headerlink" title="16.    易语言窗体法"></a>16.    易语言窗体法</h3><pre><code>利用二进制字符串FF 25查找易语言窗体
+更改易语言主窗口弹出代码，使程序跳过注册窗口，直接弹出用户界面
+</code></pre><h3 id="17-易语言退出暗桩"><a href="#17-易语言退出暗桩" class="headerlink" title="17.易语言退出暗桩"></a>17.易语言退出暗桩</h3><pre><code>利用push窗体破解软件时，会遇到暗桩，删除暗桩，正常运行
+用OD打开 设置API断点》进程函数》ExitProcess
+F9运行到断点处，上方有一个调用退出函数的call
+再上面有一个可以跳过call 的跳转，把他改成jmp然后保存即可
+</code></pre><h3 id="18-VB按钮脚本破解"><a href="#18-VB按钮脚本破解" class="headerlink" title="18.VB按钮脚本破解"></a>18.VB按钮脚本破解</h3><pre><code>掌握利用VB脚本下断点，找到关键关键跳转
+利用脚本程序下断点，在断点出找到cmp*0xFFFF处，这个cmp比较命令下面的跳转为关键跳转
+运行脚本（VB事件断点查找脚本）
+然后运行程序，停在断点出
+F8单步步过，向下查找有FFFF的命令，紧跟着的跳转就是关键跳转，设置断点，并删除其他断点
+把刚才的跳转nop掉，然后Ctrl+g和上方ffff一样的命令，把下面的断点也nop掉
+</code></pre><h3 id="19-修改软件标题图标"><a href="#19-修改软件标题图标" class="headerlink" title="19.    修改软件标题图标"></a>19.    修改软件标题图标</h3><pre><code>PE Explorer修改软件标题信息
+用PE Explorer打开软件，单击左侧的rc资源-&gt;TFRMTSFILTER 双击FrmTSFilter:TFrmTSFilter
+单击caption然后再下面修改，然后单击应用即可
+</code></pre>
+    </div>
+</div>
+
+<div class="cube-article-nav">
+    <ul>
+        
+        
+        <li class="next">
+            <a href="/2018/10/03/bugkuwriteup/">
+                Bugku逆向部分writeup
+                <i class="cube-icon cube-next" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+<!-- TODO 根据theme.comment的内容进行入口选择 -->
+
+
+
         </div>
         <div class="cube-right">
             
@@ -302,7 +420,7 @@
     <div class="cube-boxs">
         
         
-        <div class="cube-box ">
+        <div class="cube-box-bg ">
             <a href="/categories/笔记/">#笔记</a>
         </div>
         
@@ -323,12 +441,12 @@
     <div class="cube-boxs">
         
         
-        <div class="cube-box ">
+        <div class="cube-box-bg ">
             <a href="/tags/笔记/">#笔记</a>
         </div>
         
         
-        <div class="cube-box ">
+        <div class="cube-box-bg ">
             <a href="/tags/writeup/">#writeup</a>
         </div>
         
