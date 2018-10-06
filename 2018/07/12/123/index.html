@@ -10,7 +10,7 @@
     
     
     
-    <title>标题 | Hexo</title>
+    <title>WannaLOL2解题(详细) | showchenke</title>
     <!-- inject:style -->
     <link href="/css/style.css" rel="stylesheet" type="text/css">
     <!-- endinject -->
@@ -161,7 +161,7 @@
     <div class="cube-content">
         <div class="cube-left">
             <div class="cube-article">
-    <h1 class="title">标题</h1>
+    <h1 class="title">WannaLOL2解题(详细)</h1>
     
     <div class="cube-article-header">
         <div class="cube-article-date">
@@ -172,39 +172,84 @@
         <div class="cube-article-tags">
     <i class="cube-icon cube-icon-tag" aria-hidden="true"></i>
     
-    <a href="/tags/writeup标签/">#writeup标签</a>
+    <a href="/tags/writeup/">#writeup</a>
     
 </div>
     </div>
     
     <div class="cube-article-content cube-markdown">
         
-        <h1 id="WannaLOL2解题"><a href="#WannaLOL2解题" class="headerlink" title="WannaLOL2解题"></a>WannaLOL2解题</h1><ol>
-<li>黑盒测试<br>运行文件，看看有什么效果<br>黑盒测试<br>输入，限制长度，控制，提示错误之类的</li>
-</ol>
-<p>判断位数，32位/64位<br>可以通过IDA打开看看，64位只能打开64位的文件，32位只能打开32位的文件</p>
-<p>IDA7.0他会提示错误如果打开错误</p>
-<p>这一栏也有提示，这个文件是32位的</p>
-<p>搜索关键字符串error<br>判断语句在上方<br>push为函数的开始，return为函数的结束<br>———  代表函数的开始</p>
-<p>因为不是很会汇编所以我利用IDA的F5功能把他编译成C语言<br>编译之前发现有两段花指令</p>
-<p>花指令是程序中的无用代码，程序多它没影响，少了它也能正常运行。加花指令后，杀毒软件对木马静态反汇编时，木马的代码就不会正常显示出来，加大杀毒软件的查杀难度。<br>绕过花指令有两种方法<br>首先我们要设置Number of opcode bytes（操作码的字节数），我使用的是8</p>
-<p>修改完之后就会出现以下情况<br>其中话指令说对应的就是E8 ，扰乱了反编译的过程</p>
-<p>以下有两种绕过方式，分别在两条话指令中操作<br>一、首先我们选中E8</p>
-<p>绕后打开Hex View</p>
-<p>这样就可以定位到对应的地方<br>F2   将他改成90 然后F2确认</p>
-<p>我们发现E8改为90<br>后面的数据变正常了</p>
-<p>90：是一个单独的指令，是一个什么都不做的指令</p>
-<p>二、第二种方法<br>我们选中E8的位置按u（undfine）</p>
-<p>然后选择下面的66按c（code）</p>
-<p>变成如下情况<br>就好像E8被注释掉了</p>
-<p>花指令已经被我们绕过</p>
-<p>我们选中整个函数从push开始到retn<br>按p<br>然后按F5</p>
-<p>这是编译后的伪C</p>
-<p>这一段应该简单的<br>上面是ascii码<br>我们把它转换回来</p>
-<p>根据这个我们可以判断出来长度是4，第一位是1，第二位是5<br>后面两位我们继续往下看</p>
-<p>我把四个字符串改为c1，c2，c3，c4<br>v10 = C3 - ‘0’;<br>  v0 = (double)v10;<br>  v10 = C1 - ‘0’;<br>  v1 = (double)v10;<br>  v10 = C2 - ‘0’;<br>  v2 = v1 / (double)v10;<br>  v10 = C4 - ‘0’;<br>  <em>(float </em>)&amp;v10 = (v0 - v2) <em> (double)v10 </em> 16.0;<br>  if ( <em>(float </em>)&amp;v10 != 384.0 )</p>
-<p>我这里列出了关键部分，其他语句没有什么意义的<br>已知C1=1，C2=5</p>
-<p>(c3-1/5)<em>c4</em>16.0=384.0<br>(c3-0.2)*c4==24.0<br>然后我们可以简单的穷举</p>
+        <h1 id="WannaLOL2解题"><a href="#WannaLOL2解题" class="headerlink" title="WannaLOL2解题"></a>WannaLOL2解题</h1><h2 id="1-黑盒测试"><a href="#1-黑盒测试" class="headerlink" title="1.黑盒测试"></a>1.黑盒测试</h2><pre><code>运行文件，看看有什么效果&lt;br/&gt;
+黑盒测试
+输入，限制长度，控制，提示错误之类的&lt;br/&gt;
+
+判断位数，32位/64位&lt;br/&gt;
+可以通过IDA打开看看，64位只能打开64位的文件，32位只能打开32位的文件&lt;br/&gt;
+
+IDA7.0他会提示错误如果打开错误&lt;br/&gt;
+
+这一栏也有提示，这个文件是32位的&lt;br/&gt;
+</code></pre><h2 id="2-分析程序"><a href="#2-分析程序" class="headerlink" title="2.分析程序"></a>2.分析程序</h2><pre><code>搜索关键字符串error&lt;br/&gt;
+判断语句在上方&lt;br/&gt;
+push为函数的开始，return为函数的结束&lt;br/&gt;
+---------  代表函数的开始
+
+因为不是很会汇编所以我利用IDA的F5功能把他编译成C语言&lt;br/&gt;
+编译之前发现有两段花指令
+
+
+花指令是程序中的无用代码，程序多它没影响，少了它也能正常运行。加花指令后，杀毒软件对木马静态反汇编时，木马的代码就不会正常显示出来，加大杀毒软件的查杀难度。&lt;br/&gt;
+绕过花指令有两种方法&lt;br/&gt;
+首先我们要设置Number of opcode bytes（操作码的字节数），我使用的是8
+
+
+修改完之后就会出现以下情况&lt;br/&gt;
+其中话指令说对应的就是E8 ，扰乱了反编译的过程
+</code></pre><h2 id="有两种绕过方式，分别在两条花指令中操作"><a href="#有两种绕过方式，分别在两条花指令中操作" class="headerlink" title="有两种绕过方式，分别在两条花指令中操作"></a>有两种绕过方式，分别在两条花指令中操作<br></h2><h3 id="一、首先我们选中E8"><a href="#一、首先我们选中E8" class="headerlink" title="一、首先我们选中E8"></a>一、首先我们选中E8</h3><pre><code>绕后打开Hex View
+
+这样就可以定位到对应的地方&lt;br/&gt;
+F2   将他改成90 然后F2确认
+
+我们发现E8改为90&lt;br/&gt;
+后面的数据变正常了
+
+90：是一个单独的指令，是一个什么都不做的指令
+</code></pre><h3 id="二、第二种方法"><a href="#二、第二种方法" class="headerlink" title="二、第二种方法"></a>二、第二种方法<br></h3><pre><code>我们选中E8的位置按u（undfine）
+
+然后选择下面的66按c（code）
+
+变成如下情况&lt;br/&gt;
+就好像E8被注释掉了
+
+花指令已经被我们绕过
+
+我们选中整个函数从push开始到retn&lt;br/&gt;
+按p&lt;br/&gt;
+然后按F5
+
+这是编译后的伪C
+
+
+这一段应该简单的&lt;br/&gt;
+上面是ascii码&lt;br/&gt;
+我们把它转换回来
+
+根据这个我们可以判断出来长度是4，第一位是1，第二位是5
+后面两位我们继续往下看
+</code></pre><p>我把四个字符串改为c1，c2，c3，c4</p>
+<pre><code>v10 = C3 - &apos;0&apos;;
+  v0 = (double)v10;
+  v10 = C1 - &apos;0&apos;;
+  v1 = (double)v10;
+  v10 = C2 - &apos;0&apos;;
+  v2 = v1 / (double)v10;
+  v10 = C4 - &apos;0&apos;;
+  *(float *)&amp;v10 = (v0 - v2) * (double)v10 * 16.0;
+  if ( *(float *)&amp;v10 != 384.0 )
+</code></pre><p>我这里列出了关键部分，其他语句没有什么意义的<br><br>已知C1=1，C2=5</p>
+<pre><code>(c3-1/5)*c4*16.0=384.0
+(c3-0.2)*c4==24.0
+</code></pre><p>然后我们可以简单的穷举</p>
 
     </div>
 </div>
@@ -265,7 +310,7 @@
     
     
     <div class="count">
-        <a class="count articles"><span>2</span>Article</a>
+        <a class="count articles"><span>3</span>Article</a>
         <a class="count tags"><span>2</span>Tags</a>
         <a class="count categories"><span>2</span>Categories</a>
     </div>
@@ -304,7 +349,7 @@
                     <span>1</span>
                 </p>
                 <p class="title">
-                    <a href="/2018/10/03/bugkuwriteup/" title="Bugku逆向部分writeup">Bugku逆向部分writeup</a>
+                    <a href="/2018/10/06/实验吧笔记/" title="实验吧逆向破解课程学习笔记">实验吧逆向破解课程学习笔记</a>
                 </p>
             </div>
             
@@ -318,7 +363,20 @@
                     <span>2</span>
                 </p>
                 <p class="title">
-                    <a href="/2018/07/12/123/" title="标题">标题</a>
+                    <a href="/2018/10/03/bugkuwriteup/" title="Bugku逆向部分writeup">Bugku逆向部分writeup</a>
+                </p>
+            </div>
+        </li>
+        
+        
+        
+        <li>
+            <div class="normal">
+                <p class="index">
+                    <span>3</span>
+                </p>
+                <p class="title">
+                    <a href="/2018/07/12/123/" title="WannaLOL2解题(详细)">WannaLOL2解题(详细)</a>
                 </p>
             </div>
         </li>
@@ -337,12 +395,12 @@
         
         
         <div class="cube-box ">
-            <a href="/categories/分类/">#分类</a>
+            <a href="/categories/writeup/">#writeup</a>
         </div>
         
         
         <div class="cube-box ">
-            <a href="/categories/writeup/">#writeup</a>
+            <a href="/categories/笔记/">#笔记</a>
         </div>
         
     </div>
@@ -358,12 +416,12 @@
         
         
         <div class="cube-box ">
-            <a href="/tags/writeup标签/">#writeup标签</a>
+            <a href="/tags/writeup/">#writeup</a>
         </div>
         
         
         <div class="cube-box-bg ">
-            <a href="/tags/writeup/">#writeup</a>
+            <a href="/tags/笔记/">#笔记</a>
         </div>
         
     </div>
