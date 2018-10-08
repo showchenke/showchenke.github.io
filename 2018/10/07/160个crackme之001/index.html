@@ -180,7 +180,7 @@
     <div class="cube-article-content cube-markdown">
         
         <h2 id="1-程序分析"><a href="#1-程序分析" class="headerlink" title="1.程序分析"></a>1.程序分析</h2><p> 想要破解一个程序首先就要先了解这个程序（先做一个备份），打开里面有三个按钮，从左到右分别是用户名/注册码、退出、注册码。先进入第一个随意输入用户名/序列号，然后check it baby！，弹出提示对话框Sorry， The Serial is incorrect !，记住这个提示，第三个就是直接输入注册码一类的东西。<br><br> 知道提示后，就比较好办，我们只要找到弹出对话框的地方，然后向上寻找关键跳转，jmp或者nop掉就可以了。</p>
-<h2 id="2-具体步骤"><a href="#2-具体步骤" class="headerlink" title="2.具体步骤"></a>2.具体步骤</h2><p> 我们使用OD打开,F12暂停法，先运行程序，输入用户名和伪码（我输的是112233/123123123），然后点Check it baby！，弹出对话框先不急着关闭，F12暂停，然后点击工具栏中的K，进入堆栈页面<br><br><img src="image\crackme\001" alt="图片"><br>上面有连个MessageBox的地址第一个7778D118显然太大，那就只有第二个了，然后下面的一个函数调用也可以先注意一下。<br>右键第二个MessageBox，显示调用，给这个call断点，然后向上找到函数的头部（push ebp），下断点</p>
+<h2 id="2-具体步骤"><a href="#2-具体步骤" class="headerlink" title="2.具体步骤"></a>2.具体步骤</h2><p> 我们使用OD打开,F12暂停法，先运行程序，输入用户名和伪码（我输的是112233/123123123），然后点Check it baby！，弹出对话框先不急着关闭，F12暂停，然后点击工具栏中的K，进入堆栈页面<br><br><img src="https://i.imgur.com/UDphWUc.png" alt=""><br>上面有连个MessageBox的地址第一个7778D118显然太大，那就只有第二个了，然后下面的一个函数调用也可以先注意一下。<br>右键第二个MessageBox，显示调用，给这个call断点，然后向上找到函数的头部（push ebp），下断点</p>
 <pre><code>0042A170  /$  55            push ebp
 0042A171  |.  8BEC          mov ebp,esp
 0042A173  |.  83C4 F4       add esp,-0xC
@@ -474,7 +474,7 @@ EIP 0042FAFE Acid_bur.0042FAFE
         </div>
         
         
-        <div class="cube-box ">
+        <div class="cube-box-bg ">
             <a href="/categories/笔记/">#笔记</a>
         </div>
         
@@ -495,7 +495,7 @@ EIP 0042FAFE Acid_bur.0042FAFE
     <div class="cube-boxs">
         
         
-        <div class="cube-box ">
+        <div class="cube-box-bg ">
             <a href="/tags/writeup/">#writeup</a>
         </div>
         
