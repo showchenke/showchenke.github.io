@@ -161,6 +161,108 @@
     <div class="cube-content">
         <div class="cube-left">
             
+<div class="cube-excerpt" id="cube-excerpt-easy_crackme">
+    <header class="cube-excerpt-header">
+        <h1><a href="/2018/10/14/easy-crackme/">easy_crackme</a></h1>
+        <div class="cube-excerpt-header-msg">
+            <div class="cube-excerpt-date">
+                <i class="cube-icon cube-icon-date" aria-hidden="true"></i>
+                2018-10-14
+            </div>
+            <div class="cube-excerpt-tags">
+                <i class="cube-icon cube-icon-tag" aria-hidden="true"></i>
+                
+                <a href="/tags/writeup/" class="cube-excerpt-tag-link">#writeup</a>
+                
+            </div>
+        </div>
+    </header>
+    <article class="cube-excerpt-entry cube-markdown">
+        
+        
+           <p><img src="https://i.imgur.com/edUbJlu.png" alt=""></p>
+<p>界面很简单，随意输入弹出对话框Incorrect Password</p>
+<p><img src="https://i.imgur.com/nakl5u1.png" alt=""></p>
+<p>有一个congratulation这就是正确提示<br>我们分别ctrl+X查看跳转</p>
+<p><img src="https://i.imgur.com/WH1YmPx.png" alt=""></p>
+<p>有4个跳转跳到错误代码中</p>
+<p><img src="https://i.imgur.com/zD8hIUa.png" alt=""></p>
+<p>只有一个跳入正确代码段中</p>
+<p>打开OD调试</p>
+<p>找到00401135（Ida中得到）设置断点<br><br>运行，任意输入，我是123456789123456789<br><br>成功段在断点出<br><br><img src="https://i.imgur.com/WyBRNIl.png" alt=""></p>
+<p>我们向上找到跳转指令</p>
+<p><img src="https://i.imgur.com/6bHffNW.png" alt=""><br>发现有一个GetDlgItemTextA<br><br>判断用来获取我们刚刚输入的12345678912345789</p>
+<p>下面进行分析</p>
+<pre><code>004010A3  |.  50            push eax                                 ; |Buffer = BD85E565
+004010A4  |.  68 E8030000   push 0x3E8                               ; |ControlID = 3E8 (1000.)
+004010A9  |.  57            push edi                                 ; |hWnd = 00401188
+004010AA  |.  FF15 9C504000 call dword ptr ds:[&lt;&amp;USER32.GetDlgItemTe&gt;; \GetDlgItemTextA
+004010B0  |.  807C24 05 61  cmp byte ptr ss:[esp+0x5],0x61           ;  第二个字符同a比较
+004010B5      75 7E         jnz short Easy_Cra.00401135              ;  不相等则跳转
+004010B7  |.  6A 02         push 0x2
+004010B9  |.  8D4C24 0A     lea ecx,dword ptr ss:[esp+0xA]           ;  3456789123456789
+004010BD  |.  68 78604000   push Easy_Cra.00406078                   ;  5y
+004010C2  |.  51            push ecx                                 ;  Easy_Cra.&lt;ModuleEntryPoint&gt;
+004010C3  |.  E8 88000000   call Easy_Cra.00401150                   ;  23个字符和5y对比
+004010C8  |.  83C4 0C       add esp,0xC
+004010CB  |.  85C0          test eax,eax
+004010CD      75 66         jnz short Easy_Cra.00401135
+004010CF  |.  53            push ebx
+004010D0  |.  56            push esi                                 ;  Easy_Cra.&lt;ModuleEntryPoint&gt;
+004010D1  |.  BE 6C604000   mov esi,Easy_Cra.0040606C                ;  R3versing
+004010D6  |.  8D4424 10     lea eax,dword ptr ss:[esp+0x10]          ;  56789123456789
+004010DA  |&gt;  8A10          /mov dl,byte ptr ds:[eax]                ;  5 7 9 2 4
+004010DC  |.  8A1E          |mov bl,byte ptr ds:[esi]                ;  R v r i g
+004010DE  |.  8ACA          |mov cl,dl
+004010E0  |.  3AD3          |cmp dl,bl                               ;  R和5对比 v和7对比 r,9 i,2 g,4
+004010E2      75 1E         jnz short Easy_Cra.00401102
+004010E4  |.  84C9          |test cl,cl
+004010E6  |.  74 16         |je short Easy_Cra.004010FE
+004010E8  |.  8A50 01       |mov dl,byte ptr ds:[eax+0x1]            ;  6 8 1 3
+004010EB  |.  8A5E 01       |mov bl,byte ptr ds:[esi+0x1]            ;  3 e s n
+004010EE  |.  8ACA          |mov cl,dl
+004010F0  |.  3AD3          |cmp dl,bl                               ;  3和6对比 e,8 s,1 n,3
+004010F2      75 0E         jnz short Easy_Cra.00401102
+004010F4  |.  83C0 02       |add eax,0x2
+004010F7  |.  83C6 02       |add esi,0x2
+004010FA  |.  84C9          |test cl,cl
+004010FC  |.^ 75 DC         \jnz short Easy_Cra.004010DA             ;  循环
+004010FE  |&gt;  33C0          xor eax,eax
+00401100  |.  EB 05         jmp short Easy_Cra.00401107
+00401102  |&gt;  1BC0          sbb eax,eax
+00401104  |.  83D8 FF       sbb eax,-0x1
+00401107  |&gt;  5E            pop esi                                  ;  kernel32.76D662C4
+00401108  |.  5B            pop ebx                                  ;  kernel32.76D662C4
+00401109  |.  85C0          test eax,eax
+0040110B      75 28         jnz short Easy_Cra.00401135
+0040110D  |.  807C24 04 45  cmp byte ptr ss:[esp+0x4],0x45           ;  1和0x45=E比较
+00401112      75 21         jnz short Easy_Cra.00401135              ;  不同则跳转
+00401114  |.  6A 40         push 0x40                                ; /Style = MB_OK|MB_ICONASTERISK|MB_APPLMODAL
+00401116  |.  68 58604000   push Easy_Cra.00406058                   ; |EasyCrackMe
+0040111B  |.  68 44604000   push Easy_Cra.00406044                   ; |Congratulation !!
+00401120  |.  57            push edi                                 ; |hOwner = 00401188
+00401121  |.  FF15 A0504000 call dword ptr ds:[&lt;&amp;USER32.MessageBoxA&gt;&gt;; \MessageBoxA
+00401127  |.  6A 00         push 0x0                                 ; /Result = 0x0
+00401129  |.  57            push edi                                 ; |hWnd = 00401188
+0040112A  |.  FF15 A4504000 call dword ptr ds:[&lt;&amp;USER32.EndDialog&gt;]  ; \EndDialog
+00401130  |.  5F            pop edi                                  ;  kernel32.76D662C4
+00401131  |.  83C4 64       add esp,0x64
+00401134  |.  C3            retn
+00401135  |&gt;  6A 10         push 0x10                                ; /Style = MB_OK|MB_ICONHAND|MB_APPLMODAL
+00401137  |.  68 58604000   push Easy_Cra.00406058                   ; |EasyCrackMe
+0040113C  |.  68 30604000   push Easy_Cra.00406030                   ; |Incorrect Password
+00401141  |.  57            push edi                                 ; |hOwner = 00401188
+00401142  |.  FF15 A0504000 call dword ptr ds:[&lt;&amp;USER32.MessageBoxA&gt;&gt;; \MessageBoxA
+</code></pre><p>分析过程中我是吧jnz改为jz是的跳转不能实现，方便我们跟踪调试</p>
+<p>最终的password是Ea5yR3versing</p>
+
+        
+    </article>
+    <footer class="cube-excerpt-footer">
+        <a class="cube-excerpt-more" href="/2018/10/14/easy-crackme/">Read More</a>
+    </footer>
+</div>
+
 <div class="cube-excerpt" id="cube-excerpt-160个crackme之001">
     <header class="cube-excerpt-header">
         <h1><a href="/2018/10/07/160个crackme之001/">160个crackme之001</a></h1>
@@ -660,9 +762,9 @@ F2   将他改成90 然后F2确认
     
     
     <div class="count">
-        <a class="count articles"><span>4</span>Article</a>
+        <a class="count articles"><span>5</span>Article</a>
         <a class="count tags"><span>2</span>Tags</a>
-        <a class="count categories"><span>3</span>Categories</a>
+        <a class="count categories"><span>4</span>Categories</a>
     </div>
 </div>
 
@@ -699,7 +801,7 @@ F2   将他改成90 然后F2确认
                     <span>1</span>
                 </p>
                 <p class="title">
-                    <a href="/2018/10/07/160个crackme之001/" title="160个crackme之001">160个crackme之001</a>
+                    <a href="/2018/10/14/easy-crackme/" title="easy_crackme">easy_crackme</a>
                 </p>
             </div>
             
@@ -713,7 +815,7 @@ F2   将他改成90 然后F2确认
                     <span>2</span>
                 </p>
                 <p class="title">
-                    <a href="/2018/10/06/实验吧笔记/" title="实验吧逆向破解课程学习笔记">实验吧逆向破解课程学习笔记</a>
+                    <a href="/2018/10/07/160个crackme之001/" title="160个crackme之001">160个crackme之001</a>
                 </p>
             </div>
         </li>
@@ -726,7 +828,7 @@ F2   将他改成90 然后F2确认
                     <span>3</span>
                 </p>
                 <p class="title">
-                    <a href="/2018/10/03/bugkuwriteup/" title="Bugku逆向部分writeup">Bugku逆向部分writeup</a>
+                    <a href="/2018/10/06/实验吧笔记/" title="实验吧逆向破解课程学习笔记">实验吧逆向破解课程学习笔记</a>
                 </p>
             </div>
         </li>
@@ -737,6 +839,19 @@ F2   将他改成90 然后F2确认
             <div class="normal">
                 <p class="index">
                     <span>4</span>
+                </p>
+                <p class="title">
+                    <a href="/2018/10/03/bugkuwriteup/" title="Bugku逆向部分writeup">Bugku逆向部分writeup</a>
+                </p>
+            </div>
+        </li>
+        
+        
+        
+        <li>
+            <div class="normal">
+                <p class="index">
+                    <span>5</span>
                 </p>
                 <p class="title">
                     <a href="/2018/07/12/WannaLOL2解题/" title="WannaLOL2解题(详细)">WannaLOL2解题(详细)</a>
@@ -757,18 +872,23 @@ F2   将他改成90 然后F2确认
     <div class="cube-boxs">
         
         
-        <div class="cube-box-bg ">
-            <a href="/categories/160道crackme/">#160道crackme</a>
-        </div>
-        
-        
-        <div class="cube-box-bg ">
-            <a href="/categories/笔记/">#笔记</a>
+        <div class="cube-box ">
+            <a href="/categories/writeup/">#writeup</a>
         </div>
         
         
         <div class="cube-box ">
-            <a href="/categories/writeup/">#writeup</a>
+            <a href="/categories/160道crackme/">#160道crackme</a>
+        </div>
+        
+        
+        <div class="cube-box ">
+            <a href="/categories/reversing-kr/">#reversing.kr</a>
+        </div>
+        
+        
+        <div class="cube-box ">
+            <a href="/categories/笔记/">#笔记</a>
         </div>
         
     </div>
