@@ -546,7 +546,127 @@ print &quot;&quot;.join(r1)
 </code></pre><p>地址00B5150A-00B515E3是第一次异或运算所用到的数据</p>
 <p>地址00B5142A-00B51503是做第二次加减运算所用到的数据</p>
 <p>它的加密过程是，拿上一次加密得到的32位字符串，和地址00B5150A-00B515E3的32位字符做异或运算，<br>然后拿[local.44]就是伪C中出现的0x68他循环结果就是“0-21”  与0x80000001做与运算得到的结果其实只有0和1，如果是0，就做一次减运算与00B5142A-00B51503中的数据，如果是1则做加运算</p>
+<p>加密完成后进入00B516A6  call EasyEasy.00B51900 ，进行字符串比对，如果比对成功返回success</p>
+<p>下面是第二个加密的逆向脚本脚本</p>
+<pre><code>#!/usr/bin/python
+# coding=utf-8
 
+s = [0xEF,0x68,0x14,0x68,0xEB,0x91,0x74,0x83,   #最终比对的字符串
+     0x77,0x6A,0xC2,0xA2,0xA8,0x41,0xDC,0x30,
+     0x54,0x4D,0xAE,0x30,0x2F,0xC2,0x41,0x75,
+     0xCD,0x34,0x7F,0x33,0xF3,0xE0,0x59,0xD7]
+c1 = [0x6D,0x6C,0x3A,0x7A,0x1D,0x4F,0x8A,0x7F,    #加密字符串1
+      0xB8,0x4A,0x57,0x13,0x2F,0xA7,0x63,0xBA,
+      0xC5,0xAA,0x65,0x99,0xDF,0x58,0xF5,0x54,
+      0x46,0xAB,0xB2,0xA0,0x31,0xC0,0xEB,0x38]
+c2 = [0x57,0x4D,0x4E,0x5E,0x4B,0x5A,0x51,0x55,    #加密字符串2
+      0x5D,0x5E,0x5F,0x51,0x5C,0x4D,0x58,0x5F,
+      0x57,0x54,0x5D,0x58,0x59,0x59,0x58,0x5F,
+      0x5B,0x58,0x5F,0x5B,0x5D,0x4C,0x52,0x5F]
+a = [&apos;&apos;]*100
+for i in range(0,32):
+    if i%2==0:
+        a[i] = chr((s[i] + c2[i])%256^c1[i])
+    else:
+        a[i] = (s[i] - c2[i]) ^ c1[i]
+        if a[i]&lt;0:
+            a[i] +=256
+        a[i] = chr(a[i])
+b = &quot;&quot;.join(a)
+print b
+</code></pre><p>由于第一个加密用的是不可逆的与或运算，因此我们需要通过爆破逆出flag</p>
+<pre><code>#!/usr/bin/python
+# coding=utf-8
+
+#a1 = &quot;123456789abcdef1234567&quot;      #OD调试时用的值
+#nHvFWyefWFZilSs1+o4wnHvFWyefWz@@   #测试的结果值
+s = &quot;R9Ly6NoJvsIPnWhETYtHe4Sdl+MbGujaZpk102wKCr7/ODg5zXAFqQfxBicV3m8U&quot;#加密时作为比对的字符串
+r1 = [&apos;&apos;]*100                                   #输入的flag通过第一次加密得到的字符串
+r2 =&quot;+wXp+xOQlFvB+SWknSnAW1lBnwlxaT@@&quot;      #第一次加密得到的正确字符串
+# a1 = [102, 108, 97, 103, 123, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 125]
+a1 = [32]*22            # #输入值转成十进制，32是有效字符的开始
+
+while 1:
+    j = 0 #v8
+    for i in range(0,22,3): #i
+        i2 = i
+        if i2 &gt;= 22:
+            break
+        x = (a1[i]&gt;&gt;2) &amp; 63         #右移两位然后与63（0x3f）
+        r1[j] = s[x]
+    ##############################
+        if r1[j]!=r2[j]:           #如果对不上就会加一，从32往上加，直到相等
+            a1[i] += 1
+            if a1[i]&gt;126:
+                a1[i-1]+=1
+            break
+    #############################
+        j += 1
+        x=(a1[i]&lt;&lt;4) &amp; 48           #左移四位然后与48（0x30）
+        i2 = i + 1
+        if i2 &gt;= 22:                #最后三位
+            r1[j]=s[x]
+            j += 1
+            r1[j] = &apos;@&apos;
+            j += 1
+            r1[j] = &apos;@&apos;
+            j += 1
+            break
+
+        y = ((a1[i+1]&gt;&gt;4) &amp; 15) | x  #右移4位与15 然后或运算 前面计算出来的X
+        r1[j] = s[y]
+    ##############################
+        if r1[j]!=r2[j]:        #爆破用
+            a1[i+1] += 1
+            if a1[i+1]&gt;126:
+                a1[i]+=1
+                a1[i+1]=32
+            break
+    #############################
+        j += 1
+        x = (a1[i+1]&lt;&lt;2) &amp; 60  #左移2位与60
+        i2 = i + 2
+        if i2 &gt;= 22:   #后两位
+            r1[j]=s[x]
+            j += 1
+            r1[j] = &apos;@&apos;
+            j += 1
+            break
+
+        n = a1[i+2]
+        y = ((n&gt;&gt;6) &amp; 3) | x  #右移6位与3再和上面运算出来的x做或运算
+        r1[j] = s[y]
+    ##############################
+        if r1[j]!=r2[j]:        #爆破
+            a1[i+2] += 1
+            if a1[i+2]&gt;126:
+                a1[i+1]+=1
+                a1[i+2]=32
+            break
+    #############################
+        j += 1
+        x = n &amp; 63              #与63
+        r1[j] = s[x]
+    ##############################
+
+        if r1[j]!=r2[j]:        #爆破
+            a1[i+3] += 1
+            if a1[i+3]&gt;126:
+                a1[i+2]+=1
+                a1[i+3]=32
+            break
+    #############################
+        j +=1
+    if j==32:
+        break
+b = [&apos;&apos;]*100           #10进制转为字符串
+for i in range(22):
+    b[i] = chr(a1[i])
+print &quot;&quot;.join(b)
+
+
+#a1 = &quot;flag{5c28ecb1c26682f7}&quot;  #最终flag
+</code></pre>
     </div>
 </div>
 
@@ -721,7 +841,7 @@ print &quot;&quot;.join(r1)
         </div>
         
         
-        <div class="cube-box ">
+        <div class="cube-box-bg ">
             <a href="/categories/160道crackme/">#160道crackme</a>
         </div>
         
@@ -731,7 +851,7 @@ print &quot;&quot;.join(r1)
         </div>
         
         
-        <div class="cube-box ">
+        <div class="cube-box-bg ">
             <a href="/categories/writeup/">#writeup</a>
         </div>
         
