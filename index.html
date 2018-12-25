@@ -183,7 +183,9 @@
            <h1>PHP学习笔记</h1>
 
 
-<p>##基本操作<br>php区分大小写</p>
+<h2>基本操作</h2>
+
+<p>php区分大小写</p>
 <p>$a = &amp;$b中的&amp;代表了共用的意思</p>
 <p>输出信息：echo、print_r、var_dump<br>echo 与 var_dump 的区别</p>
 <pre><code>&lt;?php
@@ -198,24 +200,8 @@ var_dump($a)
 <p>var_dump输出数据类型再输出内容</p>
 </blockquote>
 <p>strlen() 函数返回字符串的长度，以字符计。<br><br>strpos() 函数用于检索字符串内指定的字符或文本。</p>
-<p>##定义常量<br>    &lt;?php<br>    define(‘NAME’,’11’);<br>    //define(‘NAME’,’11’，true);默认是false，意思是规定常量是否对大小写不敏感<br>    //不区分大小写<br>    echo NAME<br>    ?&gt;<br>continue 跳出本次循环<br><br>break 跳出整个循环</p>
-<p>输出拼接用“.”</p>
-<p>##函数<br>    &lt;?php<br>    function daocha($name,$edu,$nianling,$day){<br>        echo $name;<br>    }<br>    daocha(‘mumu’,’wz’,16,’1998’);<br>    ?&gt;<br>不区分大小写<br><br>函数带的变量$name。。。 形参，下面的’mumu’,’wz’,16,’1998’为实参一一对应<br><br>函数形参必须填满</p>
-<p>###静态变量$a<br>static，当a没有值的时候a = 0，当有值的时候则不执行</p>
-<pre><code>&lt;?php
-function daocha(){
-    static $a = 0;
-    $a++;
-    echo $a;
-}
-daocha();
-daocha();
-daocha();
-//输出结果为123
-//如果不是静态变量，输出结果为111
-?&gt;
-</code></pre><p>global定义全局变量</p>
-<p>##三元运算符    </p>
+<h2>定义常量</h2><br>    &lt;?php<br>    define(‘NAME’,’11’);<br>    //define(‘NAME’,’11’，true);默认是false，意思是规定常量是否对大小写不敏感<br>    //不区分大小写<br>    echo NAME<br>    ?&gt;<br>continue 跳出本次循环<br><br>break 跳出整个循环<br><br>输出拼接用“.”<br><br><h2>函数</h2><br>    &lt;?php<br>    function daocha($name,$edu,$nianling,$day){<br>        echo $name;<br>    }<br>    daocha(‘mumu’,’wz’,16,’1998’);<br>    ?&gt;<br>不区分大小写<br><br>函数带的变量$name。。。 形参，下面的’mumu’,’wz’,16,’1998’为实参一一对应<br><br>函数形参必须填满<br><br><br><h2>静态变量$a</h2><br>static，当a没有值的时候a = 0，当有值的时候则不执行<br><br>    &lt;?php<br>    function daocha(){<br>        static $a = 0;<br>        $a++;<br>        echo $a;<br>    }<br>    daocha();<br>    daocha();<br>    daocha();<br>    //输出结果为123<br>    //如果不是静态变量，输出结果为111<br>    ?&gt;<br><br>global定义全局变量<br><br><h2>三元运算符</h2>
+
 <pre><code>//empty//如果没有值则为真 如果有值则为假
 //isset//如果有值则为真 如果没有值则为假
 &lt;?php
@@ -237,8 +223,10 @@ if(isset($_GET[&apos;name&apos;])){
 $a = empty($_GET[&apos;name&apos;])? &quot;&quot; : $_GET[&apos;name&apos;];
 echo $a;
 ?&gt;
-</code></pre><p>##数组</p>
-<p>##时间戳</p>
+</code></pre><h2>数组</h2>
+
+<h2>时间戳</h2>
+
 <pre><code>Time()获取当前时间
 Date时间戳转化成日期时间
 Y:年
@@ -251,7 +239,8 @@ s：秒
 a：小写的午前和午后（am或pm）
 
 exit;禁止走下面代码
-</code></pre><p>##文件操作</p>
+</code></pre><h2>文件操作</h2>
+
 <p>###php读取文件内容    </p>
 <p>####修改或添加文件</p>
 <pre><code>Fopen(./1.xx,&quot;a+&quot;);打开一个文件，参数2是打开一个文件的权限
@@ -266,10 +255,12 @@ Fclose($find)//关闭资源
 <pre><code>unlink
 </code></pre><p>####例子<br>    &lt;?php<br>    $a=$_GET[‘mumu’];  //get方式获取文件内容<br>    $l=Fopen(“./1.txt”, “w+”); //打开文件，权限<br>    fwrite($l,$a); //向文件中写入<br>    ?&gt;</p>
 <p>##GET&amp;POST<br>    <head><br>    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><br>    </head><br>    <form action="./1.php" method="post"><br>    用户名：<input type="text" name="username" placeholder="请输入账号"><br>    密码：<input type="password" name="password" placeholder="请输入密码"><br>    <p><br>    <input type="submit" value="提交"><br>    </p><br>    </form><br>    &lt;?php<br>    var_dump($_POST);//GET方式输入的用户名密码会显示在url上，post方式不会<br>    ?&gt;</p>
-<p>##文件包含</p>
+<h2>文件包含</h2>
+
 <pre><code>include &apos;./1.txt&apos;;
 include_once &apos;./1.txt&apos;;//包含之前判断这个文件是否被包含，如果被包含则不会再包含
-</code></pre><p>##Mysql</p>
+</code></pre><h2>Mysql</h2>
+
 <pre><code>登录mysql
     mysql 
     -h 你的ip
@@ -311,7 +302,8 @@ mysql数据类型
 搜索关键字
     select * from admin wherre username like &quot;%chen%&quot;;    包含
     select * from admin wherre username like &quot;%chen&quot;;    结尾是chen的数据
-</code></pre><p>##PHP操作mysql</p>
+</code></pre><h2>PHP操作mysql</h2>
+
 <pre><code>&lt;?php
 $lin = mysql_connect(&apos;127.0.0.1&apos;,&apos;root&apos;,&apos;root&apos;);//连接数据库
 mysql_query(&quot;use test&quot;);//选择数据库
@@ -334,9 +326,11 @@ mysql_error() //错误信息
 mysql_num_row() //取得结果集的长度
 */
 ?&gt;
-</code></pre><p>##面向对象</p>
+</code></pre><h2>面向对象</h2>
+
 <pre><code>理解就可以，安全行业懂代码并不需要开发
-</code></pre><p>##cookie与session</p>
+</code></pre><h2>cookie与session</h2>
+
 <pre><code>发送给服务端，用来做验证的
 用户访问服务器的时候服务器会返回给用户一个cookie记录在本地
 请求网站 如果cookie没有phpsession那么服务器就会给你定义一个PHPSESSID
@@ -381,14 +375,16 @@ if(isset($_SESSION[&apos;username&apos;])){     //判断session是否有值
 }else {
     include_once &apos;/1.html&apos;;
 }
-</code></pre><p>##cookie跨域</p>
+</code></pre><h2>cookie跨域</h2>
+
 <pre><code>默认的cookie只能对当前域名（完整域名：有效的二级域名）有效
 cookie跨域：指的是允许在不同的二级域名之间共享（一级域名一致）
 php设置cookie：
     setcookie(&quot;名字&quot;,值,有效时间,&apos;有效路径&apos;,&quot;有效域&quot;);
     setcookie(&quot;PHPSISSID&quot;,session_id(),time()+100,&apos;/&apos;,&quot;xss.cn&quot;);
                          获取session名,时间向后延100秒
-</code></pre><p>##文件上传</p>
+</code></pre><h2>文件上传</h2>
+
 <pre><code>upload_tmp_dir = D:\phpstudy\PHPTutorial\find_tmp    上传临时文件目录
 
 enctype 属性规定在发送到服务器之前应该如何对表单数据进行编码
@@ -420,7 +416,7 @@ upload_err_cant_write将文件读到目录的时候，没有权限写入（linux
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre><p>####对上传文件的操作1.php<br>        &lt;?php<br>        var_dump($_FILES);<br>        include_once ‘./1.html’;<br>        switch (@$_FILES[“file2”][“error”]){<br>            case 0:<br>            @move_uploaded_file($_FILES[“file2”][“tmp_name”], “./111.jpg”); //如果文件上传成功就把临时文件移动到当前目录然后修改名字为111.jpg<br>            break;<br>            default:<br>                echo 1;<br>                break;<br>        }<br>        ?&gt;</p>
-<p>##补充<br>    可变变量<br>        &lt;?php<br>        $a = ‘chen’;<br>        $b = ‘a’;<br>        echo $a; //chen<br>        echo $$b; //chen<br>        ?&gt;</p>
+<p></p><h2>补充</h2><br>    可变变量<br>        &lt;?php<br>        $a = ‘chen’;<br>        $b = ‘a’;<br>        echo $a; //chen<br>        echo $$b; //chen<br>        ?&gt;<p></p>
 
         
     </article>
@@ -1669,7 +1665,7 @@ F2   将他改成90 然后F2确认
         </div>
         
         
-        <div class="cube-box-bg ">
+        <div class="cube-box ">
             <a href="/categories/笔记/">#笔记</a>
         </div>
         
