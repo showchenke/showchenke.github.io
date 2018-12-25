@@ -161,6 +161,272 @@
     <div class="cube-content">
         <div class="cube-left">
             
+<div class="cube-excerpt" id="cube-excerpt-渗透测试学习之PHP学习笔记">
+    <header class="cube-excerpt-header">
+        <h1><a href="/2018/12/25/渗透测试学习之PHP笔记/">渗透测试学习之PHP学习笔记</a></h1>
+        <div class="cube-excerpt-header-msg">
+            <div class="cube-excerpt-date">
+                <i class="cube-icon cube-icon-date" aria-hidden="true"></i>
+                2018-12-25
+            </div>
+            <div class="cube-excerpt-tags">
+                <i class="cube-icon cube-icon-tag" aria-hidden="true"></i>
+                
+                <a href="/tags/笔记/" class="cube-excerpt-tag-link">#笔记</a>
+                
+            </div>
+        </div>
+    </header>
+    <article class="cube-excerpt-entry cube-markdown">
+        
+        
+           <p>#PHP学习笔记</p>
+<p>##基本操作<br>php区分大小写</p>
+<p>$a = &amp;$b中的&amp;代表了共用的意思</p>
+<p>输出信息：echo、print_r、var_dump<br>echo 与 var_dump 的区别</p>
+<pre><code>&lt;?php
+$a = &quot;1&lt;hr /&gt;&quot;;
+echo $a;
+var_dump($a)
+?&gt;
+</code></pre><blockquote>
+<p>echo输出内容</p>
+</blockquote>
+<blockquote>
+<p>var_dump输出数据类型再输出内容</p>
+</blockquote>
+<p>strlen() 函数返回字符串的长度，以字符计。<br><br>strpos() 函数用于检索字符串内指定的字符或文本。</p>
+<p>##定义常量<br>    &lt;?php<br>    define(‘NAME’,’11’);<br>    //define(‘NAME’,’11’，true);默认是false，意思是规定常量是否对大小写不敏感<br>    //不区分大小写<br>    echo NAME<br>    ?&gt;<br>continue 跳出本次循环<br><br>break 跳出整个循环</p>
+<p>输出拼接用“.”</p>
+<p>##函数<br>    &lt;?php<br>    function daocha($name,$edu,$nianling,$day){<br>        echo $name;<br>    }<br>    daocha(‘mumu’,’wz’,16,’1998’);<br>    ?&gt;<br>不区分大小写<br><br>函数带的变量$name。。。 形参，下面的’mumu’,’wz’,16,’1998’为实参一一对应<br><br>函数形参必须填满</p>
+<p>###静态变量$a<br>static，当a没有值的时候a = 0，当有值的时候则不执行</p>
+<pre><code>&lt;?php
+function daocha(){
+    static $a = 0;
+    $a++;
+    echo $a;
+}
+daocha();
+daocha();
+daocha();
+//输出结果为123
+//如果不是静态变量，输出结果为111
+?&gt;
+</code></pre><p>global定义全局变量</p>
+<p>##三元运算符    </p>
+<pre><code>//empty//如果没有值则为真 如果有值则为假
+//isset//如果有值则为真 如果没有值则为假
+&lt;?php
+$_GET[&apos;name&apos;];
+var_dump($_GET)//如果不输入就会报错
+?&gt;
+
+我们可以用这个解决
+&lt;?php
+if(isset($_GET[&apos;name&apos;])){
+    var_dump($_GET);
+}else{
+    echo &quot;get方式输入&quot;;
+}
+?&gt;
+
+用三元运算符解决
+&lt;?php
+$a = empty($_GET[&apos;name&apos;])? &quot;&quot; : $_GET[&apos;name&apos;];
+echo $a;
+?&gt;
+</code></pre><p>##数组</p>
+<p>##时间戳</p>
+<pre><code>Time()获取当前时间
+Date时间戳转化成日期时间
+Y:年
+m：月
+d：日
+H：24小时格式
+h：十二小时格式
+i：分
+s：秒
+a：小写的午前和午后（am或pm）
+
+exit;禁止走下面代码
+</code></pre><p>##文件操作</p>
+<p>###php读取文件内容    </p>
+<p>####修改或添加文件</p>
+<pre><code>Fopen(./1.xx,&quot;a+&quot;);打开一个文件，参数2是打开一个文件的权限
+Fwrite(&apos;文件&apos;,&apos;内容&apos;);
+Fclose(find);关闭资源
+</code></pre><p>####读文件</p>
+<pre><code>Fget($find)//读第一行文件
+Fread($find,获取字节)//指定获取内容
+Filesize($find)//获取文件字节
+Fclose($find)//关闭资源
+</code></pre><p>####删除文件</p>
+<pre><code>unlink
+</code></pre><p>####例子<br>    &lt;?php<br>    $a=$_GET[‘mumu’];  //get方式获取文件内容<br>    $l=Fopen(“./1.txt”, “w+”); //打开文件，权限<br>    fwrite($l,$a); //向文件中写入<br>    ?&gt;</p>
+<p>##GET&amp;POST<br>    <head><br>    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><br>    </head><br>    <form action="./1.php" method="post"><br>    用户名：<input type="text" name="username" placeholder="请输入账号"><br>    密码：<input type="password" name="password" placeholder="请输入密码"><br>    <p><br>    <input type="submit" value="提交"><br>    </p><br>    </form><br>    &lt;?php<br>    var_dump($_POST);//GET方式输入的用户名密码会显示在url上，post方式不会<br>    ?&gt;</p>
+<p>##文件包含</p>
+<pre><code>include &apos;./1.txt&apos;;
+include_once &apos;./1.txt&apos;;//包含之前判断这个文件是否被包含，如果被包含则不会再包含
+</code></pre><p>##Mysql</p>
+<pre><code>登录mysql
+    mysql 
+    -h 你的ip
+    -U 你的用户名
+    -p 你的密码 可不填 但是后面要填
+    -P 端口号
+查看数据库
+    show database;
+创建数据库
+    create database [name] ;
+进入数据库
+    use [database];
+查看数据表
+    show tables 
+创建表
+    create table [tablename](
+    username varchar(20) not null,
+    password text not null); 
+查看表结构
+    desc 表名; 
+添加数据 
+    insert into 表名 values(&quot;admin&quot;, &quot;123456&quot;);
+    insert into 表名 (username,password) values(&quot;admin&quot;, &quot;123456&quot;);
+查看 select * from admin where username=&apos;admin&apos;;
+     limit 0,10; //只查看0-10条
+修改数据 
+    update 表名 set 字段名 = &apos;&apos;;
+清空表数据 
+    delete from admin; delete from admin username=&apos;123456&apos;;
+删除表 
+    drop table admin;
+备份数据 
+    数据库的数据位置在phpstudy/MySQL/data中
+    SHOW VARIABLES LIKE &apos;%datadir%&apos;查看数据库文件存放目录
+    select * from admin into outfile &apos;d:/1.sql&apos;;
+not null 和 default 的使用
+mysql数据类型
+
+搜索关键字
+    select * from admin wherre username like &quot;%chen%&quot;;    包含
+    select * from admin wherre username like &quot;%chen&quot;;    结尾是chen的数据
+</code></pre><p>##PHP操作mysql</p>
+<pre><code>&lt;?php
+$lin = mysql_connect(&apos;127.0.0.1&apos;,&apos;root&apos;,&apos;root&apos;);//连接数据库
+mysql_query(&quot;use test&quot;);//选择数据库
+mysql_query(&quot;set names utf8&quot;);//编码utf8
+//mysql_query(&quot;insert into admin values (&apos;chen&apos;,&apos;123456&apos;)&quot;);
+$list=mysql_query(&quot;select * from admin&quot;);
+//$list_data = mysql_fetch_array($list,MYSQL_ASSOC);//assoc关联，NUM索引。。。。。这样只能出一条
+
+//可以这样解决
+while($list_data = mysql_fetch_array($list,MYSQL_NUM)){
+    var_dump($list_data);
+    echo &quot;&lt;hr/&gt;&quot;;
+}
+//var_dump($list_data);
+echo mysql_num_rows($list);//取得结果集的长度
+
+/*
+mysql_errno() //出现错误的错误编号
+mysql_error() //错误信息
+mysql_num_row() //取得结果集的长度
+*/
+?&gt;
+</code></pre><p>##面向对象</p>
+<pre><code>理解就可以，安全行业懂代码并不需要开发
+</code></pre><p>##cookie与session</p>
+<pre><code>发送给服务端，用来做验证的
+用户访问服务器的时候服务器会返回给用户一个cookie记录在本地
+请求网站 如果cookie没有phpsession那么服务器就会给你定义一个PHPSESSID
+如果请求网站有PHPSESSID，服务器看到了PHPSESSION之后获取PHPSESSID的内容去找session的内容名字的文件名。
+&lt;?php
+echo &quot;Hello World&quot;;
+session_start(); //PHP从session仓库中加载已经存储的session变量
+$_SESSION[&apos;name&apos;]=&apos;caocao&apos;;
+//session文件中的值就是name|s:6:&quot;caocao&quot;;
+//$_SESSION 好比一个数组 $_SESSION[&apos;name&apos;] = &apos;caocao&apos; 这好比在数组中加了一个元素，相当于$_SESSION = array(&quot;name&quot;=&gt;&quot;caocao&quot;) 使用的时候 还要使用$_SESSION[&apos;name&apos;] 才能得到&apos;caocao&apos;。
+?&gt;
+</code></pre><p>###登录页(1.html)</p>
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;title&gt;用户注册&lt;/title&gt;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;form action=&quot;./1.php&quot; method=&quot;post&quot;&gt;
+&lt;p&gt;
+用户名：&lt;input type=&quot;text&quot; name=&quot;username&quot; placeholder=&quot;请输入账号&quot; /&gt;
+&lt;/p&gt;
+&lt;p&gt;
+密码：&lt;input type=&quot;password&quot; name=&quot;password&quot; placeholder=&quot;请输入密码&quot; /&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;input type=&quot;submit&quot; name=&quot;提交&quot;&gt;
+&lt;/p&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>###验证session(1.php)</p>
+<pre><code>&lt;?php
+session_start();
+$username = empty($_POST[&apos;username&apos;])?&quot;&quot;:$_POST[&apos;username&apos;];
+$password = empty($_POST[&apos;password&apos;])?&quot;&quot;:$_POST[&apos;password&apos;];
+if(isset($_SESSION[&apos;username&apos;])){     //判断session是否有值
+    echo &apos;已经登陆过了&apos;;
+}elseif ($username == &apos;admin&apos; and $password == &apos;123456&apos;) {
+    echo &apos;登录成功&apos;;
+    $_SESSION[&apos;username&apos;] = &apos;1&apos;;
+}else {
+    include_once &apos;/1.html&apos;;
+}
+</code></pre><p>##cookie跨域</p>
+<pre><code>默认的cookie只能对当前域名（完整域名：有效的二级域名）有效
+cookie跨域：指的是允许在不同的二级域名之间共享（一级域名一致）
+php设置cookie：
+    setcookie(&quot;名字&quot;,值,有效时间,&apos;有效路径&apos;,&quot;有效域&quot;);
+    setcookie(&quot;PHPSISSID&quot;,session_id(),time()+100,&apos;/&apos;,&quot;xss.cn&quot;);
+                         获取session名,时间向后延100秒
+</code></pre><p>##文件上传</p>
+<pre><code>upload_tmp_dir = D:\phpstudy\PHPTutorial\find_tmp    上传临时文件目录
+
+enctype 属性规定在发送到服务器之前应该如何对表单数据进行编码
+语法为&lt;form enctype=&quot;value&quot;&gt;
+multipart/form-data 不对字符编码。 在使用包含文件上传控件的表单时，必须使用该值
+
+
+move_uploaded_file($f, &quot;./.jpg&quot;) 将上传的文件移动到指定位置
+$_FILES[&quot;file2&quot;][&quot;tmp_name&quot;]临时目录
+
+$_FILES[&quot;file2&quot;][&quot;error&quot;]他会返回0-6
+0：没有错误发生文件上传成功
+1：上传的文件大小超过php.ini中最大值2M(upload_max_filesize)
+2:上传的文件大小超过html中MAX_FILE_SIZE选项指定的值
+3：文件只有部分被上传，上传文件被中断
+4：没有选中上传文件，然后点击上传
+6：找不到临时文件，指定的临时目录不存在
+upload_err_cant_write将文件读到目录的时候，没有权限写入（linux需要文件写入权限）
+</code></pre><p>###实例</p>
+<p>####一个提交框1.html<br>        <html><br>        <head><br>        <meta charset="utf-8"><br>        <title>文件上传</title><br>        </head><br>        <body></body></html></p>
+<pre><code>&lt;form action=&quot;./1.php&quot; method=&quot;post&quot; enctype=&quot;multipart/form-data&quot;&gt;
+&lt;p&gt;
+上传：&lt;input type=&quot;file&quot; name=&quot;file2&quot;&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;input type=&quot;submit&quot; name=&quot;提交&quot; value=&quot;上传&quot;&gt;
+&lt;/p&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><p>####对上传文件的操作1.php<br>        &lt;?php<br>        var_dump($_FILES);<br>        include_once ‘./1.html’;<br>        switch (@$_FILES[“file2”][“error”]){<br>            case 0:<br>            @move_uploaded_file($_FILES[“file2”][“tmp_name”], “./111.jpg”); //如果文件上传成功就把临时文件移动到当前目录然后修改名字为111.jpg<br>            break;<br>            default:<br>                echo 1;<br>                break;<br>        }<br>        ?&gt;</p>
+<p>##补充<br>    可变变量<br>        &lt;?php<br>        $a = ‘chen’;<br>        $b = ‘a’;<br>        echo $a; //chen<br>        echo $$b; //chen<br>        ?&gt;</p>
+
+        
+    </article>
+    <footer class="cube-excerpt-footer">
+        <a class="cube-excerpt-more" href="/2018/12/25/渗透测试学习之PHP笔记/">Read More</a>
+    </footer>
+</div>
+
 <div class="cube-excerpt" id="cube-excerpt-瓯网杯easyeasy">
     <header class="cube-excerpt-header">
         <h1><a href="/2018/10/23/瓯网杯easyeasy/">瓯网杯easyeasy</a></h1>
@@ -1281,9 +1547,9 @@ F2   将他改成90 然后F2确认
     
     
     <div class="count">
-        <a class="count articles"><span>6</span>Article</a>
+        <a class="count articles"><span>7</span>Article</a>
         <a class="count tags"><span>2</span>Tags</a>
-        <a class="count categories"><span>4</span>Categories</a>
+        <a class="count categories"><span>5</span>Categories</a>
     </div>
 </div>
 
@@ -1320,7 +1586,7 @@ F2   将他改成90 然后F2确认
                     <span>1</span>
                 </p>
                 <p class="title">
-                    <a href="/2018/10/23/瓯网杯easyeasy/" title="瓯网杯easyeasy">瓯网杯easyeasy</a>
+                    <a href="/2018/12/25/渗透测试学习之PHP笔记/" title="渗透测试学习之PHP学习笔记">渗透测试学习之PHP学习笔记</a>
                 </p>
             </div>
             
@@ -1334,7 +1600,7 @@ F2   将他改成90 然后F2确认
                     <span>2</span>
                 </p>
                 <p class="title">
-                    <a href="/2018/10/14/easy-crackme/" title="easy_crackme">easy_crackme</a>
+                    <a href="/2018/10/23/瓯网杯easyeasy/" title="瓯网杯easyeasy">瓯网杯easyeasy</a>
                 </p>
             </div>
         </li>
@@ -1347,7 +1613,7 @@ F2   将他改成90 然后F2确认
                     <span>3</span>
                 </p>
                 <p class="title">
-                    <a href="/2018/10/07/160个crackme之001/" title="160个crackme之001">160个crackme之001</a>
+                    <a href="/2018/10/14/easy-crackme/" title="easy_crackme">easy_crackme</a>
                 </p>
             </div>
         </li>
@@ -1360,7 +1626,7 @@ F2   将他改成90 然后F2确认
                     <span>4</span>
                 </p>
                 <p class="title">
-                    <a href="/2018/10/06/实验吧笔记/" title="实验吧逆向破解课程学习笔记">实验吧逆向破解课程学习笔记</a>
+                    <a href="/2018/10/07/160个crackme之001/" title="160个crackme之001">160个crackme之001</a>
                 </p>
             </div>
         </li>
@@ -1373,7 +1639,7 @@ F2   将他改成90 然后F2确认
                     <span>5</span>
                 </p>
                 <p class="title">
-                    <a href="/2018/10/03/bugkuwriteup/" title="Bugku逆向部分writeup">Bugku逆向部分writeup</a>
+                    <a href="/2018/10/06/实验吧笔记/" title="实验吧逆向破解课程学习笔记">实验吧逆向破解课程学习笔记</a>
                 </p>
             </div>
         </li>
@@ -1406,8 +1672,13 @@ F2   将他改成90 然后F2确认
         </div>
         
         
-        <div class="cube-box-bg ">
+        <div class="cube-box ">
             <a href="/categories/writeup/">#writeup</a>
+        </div>
+        
+        
+        <div class="cube-box-bg ">
+            <a href="/categories/渗透测试学习/">#渗透测试学习</a>
         </div>
         
     </div>
