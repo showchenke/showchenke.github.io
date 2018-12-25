@@ -274,7 +274,70 @@ a：小写的午前和午后（am或pm）
 exit;禁止走下面代码
 </code></pre><h2>文件操作</h2>
 
-<h3>php读取文件内容    </h3><br><h4>修改或添加文件</h4><br><br>    Fopen(./1.xx,”a+”);打开一个文件，参数2是打开一个文件的权限<br>    Fwrite(‘文件’,’内容’);<br>    Fclose(find);关闭资源<br><h4>读文件</h4><br><br>    Fget($find)//读第一行文件<br>    Fread($find,获取字节)//指定获取内容<br>    Filesize($find)//获取文件字节<br>    Fclose($find)//关闭资源<br><h4>删除文件</h4><br><br>    unlink<br><br><br><h4>例子    </h4><br>    &lt;?php<br>    $a=$_GET[‘mumu’];  //get方式获取文件内容<br>    $l=Fopen(“./1.txt”, “w+”); //打开文件，权限<br>    fwrite($l,$a); //向文件中写入<br>    ?&gt;<br><br><h4>GET&amp;POST</h4><br><br>    <html><br>    <head><br>    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><br>    </head><br>    <form action="./1.php" method="post"><br>    用户名：<input type="text" name="username" placeholder="请输入账号"><br>    密码：<input type="password" name="password" placeholder="请输入密码"><br>    <p><br>    <input type="submit" value="提交"><br>    </p><br>    </form><br>    </html><br><br><br>    &lt;?php<br>    var_dump($_POST);//GET方式输入的用户名密码会显示在url上，post方式不会<br>    ?&gt;<br><br><h2>文件包含</h2><br><br>    include ‘./1.txt’;<br>    include_once ‘./1.txt’;//包含之前判断这个文件是否被包含，如果被包含则不会再包含<br><br><h2>Mysql</h2><br><br>    登录mysql<br>        mysql<br>        -h 你的ip<br>        -U 你的用户名<br>        -p 你的密码 可不填 但是后面要填<br>        -P 端口号<br>    查看数据库<br>        show database;<br>    创建数据库<br>        create database [name] ;<br>    进入数据库<br>        use [database];<br>    查看数据表<br>        show tables<br>    创建表<br>        create table <a href="username varchar(20">tablename</a> not null,<br>        password text not null);<br>    查看表结构<br>        desc 表名;<br>    添加数据<br>        insert into 表名 values(“admin”, “123456”);<br>        insert into 表名 (username,password) values(“admin”, “123456”);<br>    查看 select <em> from admin where username=’admin’;<br>         limit 0,10; //只查看0-10条<br>    修改数据<br>        update 表名 set 字段名 = ‘’;<br>    清空表数据<br>        delete from admin; delete from admin username=’123456’;<br>    删除表<br>        drop table admin;<br>    备份数据<br>        数据库的数据位置在phpstudy/MySQL/data中<br>        SHOW VARIABLES LIKE ‘%datadir%’查看数据库文件存放目录<br>        select </em> from admin into outfile ‘d:/1.sql’;<br>    not null 和 default 的使用<br>    mysql数据类型<br><br>    搜索关键字<br>        select <em> from admin wherre username like “%chen%”;    包含<br>        select </em> from admin wherre username like “%chen”;    结尾是chen的数据<br><br><br><br><h2>PHP操作mysql</h2><br><br>    &lt;?php<br>    $lin = mysql_connect(‘127.0.0.1’,’root’,’root’);//连接数据库<br>    mysql_query(“use test”);//选择数据库<br>    mysql_query(“set names utf8”);//编码utf8<br>    //mysql_query(“insert into admin values (‘chen’,’123456’)”);<br>    $list=mysql_query(“select <em> from admin”);<br>    //$list_data = mysql_fetch_array($list,MYSQL_ASSOC);//assoc关联，NUM索引。。。。。这样只能出一条<br><br>    //可以这样解决<br>    while($list_data = mysql_fetch_array($list,MYSQL_NUM)){<br>        var_dump($list_data);<br>        echo “<hr>“;<br>    }<br>    //var_dump($list_data);<br>    echo mysql_num_rows($list);//取得结果集的长度<br><br>    /</em><br>    mysql_errno() //出现错误的错误编号<br>    mysql_error() //错误信息<br>    mysql_num_row() //取得结果集的长度<br>    */<br>    ?&gt;<br><br><br><h2>面向对象</h2><br><br>    理解就可以，安全行业懂代码并不需要开发<br><br><br><h2>cookie与session</h2><br><br>    发送给服务端，用来做验证的<br>    用户访问服务器的时候服务器会返回给用户一个cookie记录在本地<br>    请求网站 如果cookie没有phpsession那么服务器就会给你定义一个PHPSESSID<br>    如果请求网站有PHPSESSID，服务器看到了PHPSESSION之后获取PHPSESSID的内容去找session的内容名字的文件名。<br>    &lt;?php<br>    echo “Hello World”;<br>    session_start(); //PHP从session仓库中加载已经存储的session变量<br>    $_SESSION[‘name’]=’caocao’;<br>    //session文件中的值就是name|s:6:”caocao”;<br>    //$_SESSION 好比一个数组 $_SESSION[‘name’] = ‘caocao’ 这好比在数组中加了一个元素，相当于$_SESSION = array(“name”=&gt;”caocao”) 使用的时候 还要使用$_SESSION[‘name’] 才能得到’caocao’。<br>    ?&gt;<br><br><br>###登录页(1.html)<br><br>    <html><br>    <head><br>    <meta charset="utf-8"><br>    <title>用户注册</title>&gt;<br>    </head><br>    <body><br>    <form action="./1.php" method="post"><br>    <p><br>    用户名：<input type="text" name="username" placeholder="请输入账号"><br>    </p><br>    <p><br>    密码：<input type="password" name="password" placeholder="请输入密码"><br>    </p><br>    <p><br>    <input type="submit" name="提交"><br>    </p><br>    </form><br>    </body><br>    </html><br><h4>验证session(1.php)</h4><br><br>        &lt;?php<br>        session_start();<br>        $username = empty($_POST[‘username’])?””:$_POST[‘username’];<br>        $password = empty($_POST[‘password’])?””:$_POST[‘password’];<br>        if(isset($_SESSION[‘username’])){     //判断session是否有值<br>            echo ‘已经登陆过了’;<br>        }elseif ($username == ‘admin’ and $password == ‘123456’) {<br>            echo ‘登录成功’;<br>            $_SESSION[‘username’] = ‘1’;<br>        }else {<br>            include_once ‘/1.html’;<br>        }<br><br><br><h2>cookie跨域</h2><br><br>    默认的cookie只能对当前域名（完整域名：有效的二级域名）有效<br>    cookie跨域：指的是允许在不同的二级域名之间共享（一级域名一致）<br>    php设置cookie：<br>        setcookie(“名字”,值,有效时间,’有效路径’,”有效域”);<br>        setcookie(“PHPSISSID”,session_id(),time()+100,’/‘,”xss.cn”);<br>                             获取session名,时间向后延100秒<br><br><h2>文件上传</h2><br><br>    upload_tmp_dir = D:\phpstudy\PHPTutorial\find_tmp    上传临时文件目录<br><br>    enctype 属性规定在发送到服务器之前应该如何对表单数据进行编码<br>    语法为<form enctype="value"><br>    multipart/form-data 不对字符编码。 在使用包含文件上传控件的表单时，必须使用该值<br><br><br>    move_uploaded_file($f, “./.jpg”) 将上传的文件移动到指定位置<br>    $_FILES[“file2”][“tmp_name”]临时目录<br><br>    $_FILES[“file2”][“error”]他会返回0-6<br>    0：没有错误发生文件上传成功<br>    1：上传的文件大小超过php.ini中最大值2M(upload_max_filesize)<br>    2:上传的文件大小超过html中MAX_FILE_SIZE选项指定的值<br>    3：文件只有部分被上传，上传文件被中断<br>    4：没有选中上传文件，然后点击上传<br>    6：找不到临时文件，指定的临时目录不存在<br>    upload_err_cant_write将文件读到目录的时候，没有权限写入（linux需要文件写入权限）<br><br><h3>实例</h3>
+<h3>php读取文件内容    </h3><br><h4>修改或添加文件</h4><br><br>    Fopen(./1.xx,”a+”);打开一个文件，参数2是打开一个文件的权限<br>    Fwrite(‘文件’,’内容’);<br>    Fclose(find);关闭资源<br><h4>读文件</h4><br><br>    Fget($find)//读第一行文件<br>    Fread($find,获取字节)//指定获取内容<br>    Filesize($find)//获取文件字节<br>    Fclose($find)//关闭资源<br><h4>删除文件</h4><br><br>    unlink<br><br><br><h4>例子    </h4><br>    &lt;?php<br>    $a=$_GET[‘mumu’];  //get方式获取文件内容<br>    $l=Fopen(“./1.txt”, “w+”); //打开文件，权限<br>    fwrite($l,$a); //向文件中写入<br>    ?&gt;<br><br><h4>GET&amp;POST</h4><br><br>    <html><br>    <head><br>    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><br>    </head><br>    <form action="./1.php" method="post"><br>    用户名：<input type="text" name="username" placeholder="请输入账号"><br>    密码：<input type="password" name="password" placeholder="请输入密码"><br>    <p><br>    <input type="submit" value="提交"><br>    </p><br>    </form><br>    </html><br><br><br>    &lt;?php<br>    var_dump($_POST);//GET方式输入的用户名密码会显示在url上，post方式不会<br>    ?&gt;<br><br><h2>文件包含</h2><br><br>    include ‘./1.txt’;<br>    include_once ‘./1.txt’;//包含之前判断这个文件是否被包含，如果被包含则不会再包含<br><br><h2>Mysql</h2><br><br>    登录mysql<br>        mysql<br>        -h 你的ip<br>        -U 你的用户名<br>        -p 你的密码 可不填 但是后面要填<br>        -P 端口号<br>    查看数据库<br>        show database;<br>    创建数据库<br>        create database [name] ;<br>    进入数据库<br>        use [database];<br>    查看数据表<br>        show tables<br>    创建表<br>        create table <a href="username varchar(20">tablename</a> not null,<br>        password text not null);<br>    查看表结构<br>        desc 表名;<br>    添加数据<br>        insert into 表名 values(“admin”, “123456”);<br>        insert into 表名 (username,password) values(“admin”, “123456”);<br>    查看 select <em> from admin where username=’admin’;<br>         limit 0,10; //只查看0-10条<br>    修改数据<br>        update 表名 set 字段名 = ‘’;<br>    清空表数据<br>        delete from admin; delete from admin username=’123456’;<br>    删除表<br>        drop table admin;<br>    备份数据<br>        数据库的数据位置在phpstudy/MySQL/data中<br>        SHOW VARIABLES LIKE ‘%datadir%’查看数据库文件存放目录<br>        select </em> from admin into outfile ‘d:/1.sql’;<br>    not null 和 default 的使用<br>    mysql数据类型<br><br>    搜索关键字<br>        select <em> from admin wherre username like “%chen%”;    包含<br>        select </em> from admin wherre username like “%chen”;    结尾是chen的数据<br><br><br><br><h2>PHP操作mysql</h2><br><br>    &lt;?php<br>    $lin = mysql_connect(‘127.0.0.1’,’root’,’root’);//连接数据库<br>    mysql_query(“use test”);//选择数据库<br>    mysql_query(“set names utf8”);//编码utf8<br>    //mysql_query(“insert into admin values (‘chen’,’123456’)”);<br>    $list=mysql_query(“select <em> from admin”);<br>    //$list_data = mysql_fetch_array($list,MYSQL_ASSOC);//assoc关联，NUM索引。。。。。这样只能出一条<br><br>    //可以这样解决<br>    while($list_data = mysql_fetch_array($list,MYSQL_NUM)){<br>        var_dump($list_data);<br>        echo “<hr>“;<br>    }<br>    //var_dump($list_data);<br>    echo mysql_num_rows($list);//取得结果集的长度<br><br>    /</em><br>    mysql_errno() //出现错误的错误编号<br>    mysql_error() //错误信息<br>    mysql_num_row() //取得结果集的长度<br>    */<br>    ?&gt;<br><br><br><h2>面向对象</h2><br><br>    理解就可以，安全行业懂代码并不需要开发<br><br><br><h2>cookie与session</h2><br><br>    发送给服务端，用来做验证的<br>    用户访问服务器的时候服务器会返回给用户一个cookie记录在本地<br>    请求网站 如果cookie没有phpsession那么服务器就会给你定义一个PHPSESSID<br>    如果请求网站有PHPSESSID，服务器看到了PHPSESSION之后获取PHPSESSID的内容去找session的内容名字的文件名。<br>    &lt;?php<br>    echo “Hello World”;<br>    session_start(); //PHP从session仓库中加载已经存储的session变量<br>    $_SESSION[‘name’]=’caocao’;<br>    //session文件中的值就是name|s:6:”caocao”;<br>    //$_SESSION 好比一个数组 $_SESSION[‘name’] = ‘caocao’ 这好比在数组中加了一个元素，相当于$_SESSION = array(“name”=&gt;”caocao”) 使用的时候 还要使用$_SESSION[‘name’] 才能得到’caocao’。<br>    ?&gt;<br><br><br><h3>登录页(1.html)</h3>
+
+<pre><code>&lt;html&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;title&gt;用户注册&lt;/title&gt;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;form action=&quot;./1.php&quot; method=&quot;post&quot;&gt;
+&lt;p&gt;
+用户名：&lt;input type=&quot;text&quot; name=&quot;username&quot; placeholder=&quot;请输入账号&quot; /&gt;
+&lt;/p&gt;
+&lt;p&gt;
+密码：&lt;input type=&quot;password&quot; name=&quot;password&quot; placeholder=&quot;请输入密码&quot; /&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;input type=&quot;submit&quot; name=&quot;提交&quot;&gt;
+&lt;/p&gt;
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre><h4>验证session(1.php)</h4>
+
+<pre><code>&lt;?php
+session_start();
+$username = empty($_POST[&apos;username&apos;])?&quot;&quot;:$_POST[&apos;username&apos;];
+$password = empty($_POST[&apos;password&apos;])?&quot;&quot;:$_POST[&apos;password&apos;];
+if(isset($_SESSION[&apos;username&apos;])){     //判断session是否有值
+    echo &apos;已经登陆过了&apos;;
+}elseif ($username == &apos;admin&apos; and $password == &apos;123456&apos;) {
+    echo &apos;登录成功&apos;;
+    $_SESSION[&apos;username&apos;] = &apos;1&apos;;
+}else {
+    include_once &apos;/1.html&apos;;
+}
+</code></pre><h2>cookie跨域</h2>
+
+<pre><code>默认的cookie只能对当前域名（完整域名：有效的二级域名）有效
+cookie跨域：指的是允许在不同的二级域名之间共享（一级域名一致）
+php设置cookie：
+    setcookie(&quot;名字&quot;,值,有效时间,&apos;有效路径&apos;,&quot;有效域&quot;);
+    setcookie(&quot;PHPSISSID&quot;,session_id(),time()+100,&apos;/&apos;,&quot;xss.cn&quot;);
+                         获取session名,时间向后延100秒
+</code></pre><h2>文件上传</h2>
+
+<pre><code>upload_tmp_dir = D:\phpstudy\PHPTutorial\find_tmp    上传临时文件目录
+
+enctype 属性规定在发送到服务器之前应该如何对表单数据进行编码
+语法为&lt;form enctype=&quot;value&quot;&gt;
+multipart/form-data 不对字符编码。 在使用包含文件上传控件的表单时，必须使用该值
+
+
+move_uploaded_file($f, &quot;./.jpg&quot;) 将上传的文件移动到指定位置
+$_FILES[&quot;file2&quot;][&quot;tmp_name&quot;]临时目录
+
+$_FILES[&quot;file2&quot;][&quot;error&quot;]他会返回0-6
+0：没有错误发生文件上传成功
+1：上传的文件大小超过php.ini中最大值2M(upload_max_filesize)
+2:上传的文件大小超过html中MAX_FILE_SIZE选项指定的值
+3：文件只有部分被上传，上传文件被中断
+4：没有选中上传文件，然后点击上传
+6：找不到临时文件，指定的临时目录不存在
+upload_err_cant_write将文件读到目录的时候，没有权限写入（linux需要文件写入权限）
+</code></pre><h3>实例</h3>
 
 <h4>一个提交框1.html</h4>
 
@@ -318,7 +381,7 @@ switch (@$_FILES[&quot;file2&quot;][&quot;error&quot;]){
     echo $a; //chen
     echo $$b; //chen
     ?&gt;
-</code></pre></form>
+</code></pre>
     </div>
 </div>
 
@@ -493,7 +556,7 @@ switch (@$_FILES[&quot;file2&quot;][&quot;error&quot;]){
         </div>
         
         
-        <div class="cube-box ">
+        <div class="cube-box-bg ">
             <a href="/categories/160道crackme/">#160道crackme</a>
         </div>
         
@@ -503,12 +566,12 @@ switch (@$_FILES[&quot;file2&quot;][&quot;error&quot;]){
         </div>
         
         
-        <div class="cube-box-bg ">
+        <div class="cube-box ">
             <a href="/categories/writeup/">#writeup</a>
         </div>
         
         
-        <div class="cube-box-bg ">
+        <div class="cube-box ">
             <a href="/categories/渗透测试学习/">#渗透测试学习</a>
         </div>
         
